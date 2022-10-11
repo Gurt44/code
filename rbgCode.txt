@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+void getRGB(double *, double *, double *) ;
+void rangeRGB(double, double, double, double *, double *, double *) ;
+double calculateKey(double, double, double) ;
+double calculateCyan(double, double) ;
+double calculateMagenta(double, double) ;
+double calculateYellow(double, double) ;
+void displayCMYK (double, double, double, double) ;
+
+int main() {
+    double red, green, blue, rangeRed, rangeBlue, rangeGreen, key, cyan, magenta, yellow ;
+    
+    getRGB(&red, &green, &blue) ;
+    rangeRGB(red, green, blue, &rangeRed, &rangeBlue, &rangeGreen) ;
+    
+    key = calculateKey(rangeRed, rangeGreen, rangeBlue) ;
+    cyan = calculateCyan(key, rangeRed) ;
+    magenta = calculateMagenta(key, rangeGreen) ;
+    yellow = calculateYellow(key, rangeBlue) ;
+    
+    displayCMYK(cyan,magenta,yellow,key) ;
+    
+}
+
+void getRGB(double *red, double *green, double *blue) {
+    
+    printf("Enter your red value: ") ;
+    scanf("%lf",red) ;
+    
+    printf("Enter your green value: ") ;
+    scanf("%lf",green) ;
+    
+    printf("Enter your blue value: ") ;
+    scanf("%lf",blue) ;
+
+}
+
+void rangeRGB(double red, double green, double blue, double *rangeRed, double *rangeGreen, double *rangeBlue) {
+
+    *rangeRed = red / 255 ;
+    *rangeGreen = green / 255 ;
+    *rangeBlue = blue / 255 ;
+
+}
+
+double calculateKey(double rangeRed, double rangeGreen, double rangeBlue) {
+    double key;
+    
+    if (rangeRed >= rangeGreen && rangeRed >= rangeBlue){
+        key = 1 - rangeRed ;
+    } else if (rangeGreen >= rangeRed && rangeGreen >= rangeBlue){
+        key = 1 - rangeGreen ;
+    } else if (rangeBlue >= rangeRed && rangeBlue >= rangeGreen){
+        key = 1 - rangeBlue ;
+    }
+    
+    return key ;
+}
+
+double calculateCyan(double rangeRed, double key){
+    double cyan;
+    
+    cyan = (1 - rangeRed - key)/(1 - key) ;
+    
+    return cyan ;
+}
+
+double calculateMagenta(double rangeGreen, double key){
+    double magenta;
+    
+    magenta = (1 - rangeGreen - key)/(1 - key) ;
+    
+    return magenta ;
+}
+
+double calculateYellow(double rangeBlue, double key){
+    double yellow;
+    
+    yellow = (1 - rangeBlue - key)/(1 - key) ;
+    
+    return yellow ;
+}
+
+void displayCMYK(double cyan, double magenta, double yellow, double key){
+    
+    printf("Your CMYK value is %.2lf,%.2lf,%.2lf,%.2lf.", cyan, magenta, yellow, key) ;
+}
